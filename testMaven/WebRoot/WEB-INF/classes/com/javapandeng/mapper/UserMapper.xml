@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javapandeng.mapper.UserMapper">
+    <!-- 实体类与数据库映射字段部分 -->
+    <resultMap id="ResultMapUser" type="com.javapandeng.po.User">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uname" column="uname" jdbcType="VARCHAR"/>
+        <result property="upass" column="upass" jdbcType="VARCHAR"/>
+        <result property="ustate" column="ustate" jdbcType="INTEGER"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="realname" column="realname" jdbcType="VARCHAR"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="utel" column="utel" jdbcType="VARCHAR"/>
+        <result property="usex" column="usex" jdbcType="VARCHAR"/>
+        <result property="addressId" column="addressId" jdbcType="INTEGER"/>
+        <result property="zctime" column="zctime" jdbcType="DATE"/>
+        <result property="lasttime" column="lasttime" jdbcType="DATE"/>
+        <association property="address" column="addressId" select="com.javapandeng.mapper.AddressMapper.load"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="User_field">
+        id,uname,upass,ustate,email,realname,uid,utel,usex,addressId,zctime,lasttime
+    </sql>
+
+    <!-- 实体类属性 -->
+    <sql id="User_insert">
+        #{id},#{uname},#{upass},#{ustate},#{email},#{realname},#{uid},#{utel},#{usex},#{addressId},#{zctime},#{lasttime}
+    </sql>
+
+    <!-- 更新结果 -->
+    <sql id="User_update">
+        <if test="uname != null">
+            uname = #{uname},
+        </if>
+        <if test="upass != null">
+            upass = #{upass},
+        </if>
+        <if test="ustate != null">
+            ustate = #{ustate},
+        </if>
+        <if test="email != null">
+            email = #{email},
+        </if>
+        <if test="realname != null">
+            realname = #{realname},
+        </if>
+        <if test="uid != null">
+            uid = #{uid},
+        </if>
+        <if test="utel != null">
+            utel = #{utel},
+        </if>
+        <if test="usex != null">
+            usex = #{usex},
+        </if>
+        <if test="addressId != null">
+            addressId = #{addressId},
+        </if>
+        <if test="zctime != null">
+            zctime = #{zctime},
+        </if>
+        <if test="lasttime != null">
+            lasttime = #{lasttime}
+        </if>
+    </sql>
+
+    <!-- 查询时的条件 -->
+    <sql id="User_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="uname != null">
+            and uname = #{uname}
+        </if>
+        <if test="upass != null">
+            and upass = #{upass}
+        </if>
+        <if test="ustate != null">
+            and ustate = #{ustate}
+        </if>
+        <if test="email != null">
+            and email = #{email}
+        </if>
+        <if test="realname != null">
+            and realname = #{realname}
+        </if>
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+        <if test="utel != null">
+            and utel = #{utel}
+        </if>
+        <if test="usex != null">
+            and usex = #{usex}
+        </if>
+        <if test="addressId != null">
+            and addressId = #{addressId}
+        </if>
+        <if test="zctime != null">
+            and zctime = #{zctime}
+        </if>
+        <if test="lasttime != null">
+            and lasttime = #{lasttime}
+        </if>
+    </sql>
+
+    <!-- 新增 -->
+    <!-- 参数：实体类 -->
+    <!-- 返回：主键 -->
+    <insert id="insert" parameterType="com.javapandeng.po.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user(
+        <include refid="User_field"/>
+        ) values(
+        <include refid="User_insert"/>
+        )
+    </insert>
+
+    <!-- 根据实体主键删除一个实体 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from user where id=#{id}
+    </delete>
+
+    <!-- 通过实体删除 -->
+    <delete id="deleteByEntity" parameterType="com.javapandeng.po.User">
+        delete from user where 1=1
+        <include refid="User_where"/>
+    </delete>
+
+    <!-- 通过map删除 -->
+    <delete id="deleteByMap" parameterType="java.util.HashMap">
+        delete from user where 1=1
+        <include refid="User_where"/>
+    </delete>
+
+    <!-- 更新一个实体 -->
+    <update id="update" parameterType="com.javapandeng.po.User">
+        update user
+        <set>
+            <include refid="User_update"/>
+        </set>
+        where 1=1
+            <include refid="User_where"/>
+    </update>
+
+    <!-- 通过id进行修改 -->
+    <update id="updateById" parameterType="com.javapandeng.po.User">
+        update user
+        <set>
+            <include refid="User_update"/>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据参数查询 -->
+    <select id="listByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 查询整个表 -->
+    <select id="listAll" resultMap="ResultMapUser">
+        select <include refid="User_field"/>
+        from user
+    </select>
+
+    <!-- 查询所有实体,根据实体属性值为判断条件查询所有实体 -->
+    <select id="listAllByEntity" resultMap="ResultMapUser" parameterType="com.javapandeng.po.User">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="load" resultMap="ResultMapUser" parameterType="java.lang.Integer">
+        select <include refid="User_field"/>
+        from user where id=#{id}
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="getById" resultMap="ResultMapUser" parameterType="java.lang.Integer">
+        select <include refid="User_field"/>
+        from user where id=#{id}
+    </select>
+
+    <!-- 通过map查询-不分页 -->
+    <select id="getByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 通过对象查询-不分页 -->
+    <select id="getByEntity" resultMap="ResultMapUser" parameterType="com.javapandeng.po.User">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 通过map查询分页 -->
+    <select id="findByMap" resultMap="ResultMapUser" parameterType="map">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 通过对象查询分页 -->
+    <select id="findByEntity" resultMap="ResultMapUser" parameterType="com.javapandeng.po.User">
+        select <include refid="User_field"/>
+        from user where 1=1
+        <include refid="User_where"/>
+    </select>
+
+    <!-- 批量新增 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into user(
+        <include refid="User_field"/>
+        ) values(
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.uname},#{item.upass},#{item.ustate},#{item.email},#{item.realname},#{item.uid},#{item.utel},#{item.usex},#{item.addressId},#{item.zctime},#{item.lasttime})
+        </foreach>
+        )
+    </insert>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update user
+            <set>
+                <if test="item.uname != null">
+                    uname = #{item.uname},
+                </if>
+                <if test="item.upass != null">
+                    upass = #{item.upass},
+                </if>
+                <if test="item.ustate != null">
+                    ustate = #{item.ustate},
+                </if>
+                <if test="item.email != null">
+                    email = #{item.email},
+                </if>
+                <if test="item.realname != null">
+                    realname = #{item.realname},
+                </if>
+                <if test="item.uid != null">
+                    uid = #{item.uid},
+                </if>
+                <if test="item.utel != null">
+                    utel = #{item.utel},
+                </if>
+                <if test="item.usex != null">
+                    usex = #{item.usex},
+                </if>
+                <if test="item.addressId != null">
+                    addressId = #{item.addressId},
+                </if>
+                <if test="item.zctime != null">
+                    zctime = #{item.zctime},
+                </if>
+                <if test="item.lasttime != null">
+                    lasttime = #{item.lasttime}
+                </if>
+            </set>
+            where 1=1
+            <if test="item.id != null">
+                and id = #{item.id}
+            </if>
+        </foreach>
+    </update>
+
+    <!-- 封装纯sql语法 -->
+    <!-- 查询一个对象返回map -->
+    <select id="getBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回实体类 -->
+    <select id="getBySqlReturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回map列表 -->
+    <select id="listBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询列表返回实体 -->
+    <select id="listBySqlReturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!-- 查询分页 -->
+    <select id="findBySqlRerturnEntity" resultMap="ResultMapUser">
+        ${sql}
+    </select>
+
+    <!-- 通过sql修改 -->
+    <update id="updateBysql">
+        ${sql}
+    </update>
+
+    <!-- 通过sql删除 -->
+    <delete id="deleteBySql">
+        ${sql}
+    </delete>
+</mapper>

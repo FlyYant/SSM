@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javapandeng.mapper.PorderMapper">
+    <!-- 实体类与数据库映射字段部分 -->
+    <resultMap id="ResultMapPorder" type="com.javapandeng.po.Porder">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="productId" column="productId" jdbcType="INTEGER"/>
+        <result property="userId" column="userId" jdbcType="INTEGER"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="addTime" column="addTime" jdbcType="TIMESTAMP"/>
+        <result property="orderPrice" column="orderPrice" jdbcType="VARCHAR"/>
+        <result property="isdelete" column="isdelete" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="ResultMapPorderDto" type="com.javapandeng.po.Porder">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="productId" column="productId" jdbcType="INTEGER"/>
+        <result property="userId" column="userId" jdbcType="INTEGER"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="addTime" column="addTime" jdbcType="TIMESTAMP"/>
+        <result property="orderPrice" column="orderPrice" jdbcType="VARCHAR"/>
+        <result property="isdelete" column="isdelete" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <association property="user" column="userId" select="com.javapandeng.mapper.UserMapper.load"/>
+        <collection property="details" column="id" ofType="com.javapandeng.po.PorderDetail" select="com.javapandeng.mapper.PorderDetailMapper.listByOrderId"/>
+    </resultMap>
+
+    <!-- 声明数据库字段 -->
+    <sql id="Porder_field">
+        id,productId,userId,code,addTime,orderPrice,isdelete,status
+    </sql>
+
+    <!-- 实体类属性 -->
+    <sql id="Porder_insert">
+        #{id},#{productId},#{userId},#{code},#{addTime},#{orderPrice},#{isdelete},#{status}
+    </sql>
+
+    <!-- 更新结果 -->
+    <sql id="Porder_update">
+        <if test="productId != null">
+            productId = #{productId},
+        </if>
+        <if test="userId != null">
+            userId = #{userId},
+        </if>
+        <if test="code != null">
+            code = #{code},
+        </if>
+        <if test="addTime != null">
+            addTime = #{addTime},
+        </if>
+        <if test="orderPrice != null">
+            orderPrice = #{orderPrice},
+        </if>
+        <if test="isdelete != null">
+            isdelete = #{isdelete},
+        </if>
+        <if test="status != null">
+            status = #{status}
+        </if>
+    </sql>
+
+    <!-- 查询时的条件 -->
+    <sql id="Porder_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="productId != null">
+            and productId = #{productId}
+        </if>
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="code != null">
+            and code = #{code}
+        </if>
+        <if test="addTime != null">
+            and addTime = #{addTime}
+        </if>
+        <if test="orderPrice != null">
+            and orderPrice = #{orderPrice}
+        </if>
+        <if test="isdelete != null">
+            and isdelete = #{isdelete}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+    </sql>
+
+    <!-- 新增 -->
+    <!-- 参数：实体类 -->
+    <!-- 返回：主键 -->
+    <insert id="insert" parameterType="com.javapandeng.po.Porder" useGeneratedKeys="true" keyProperty="id">
+        insert into porder(
+        <include refid="Porder_field"/>
+        ) values(
+        <include refid="Porder_insert"/>
+        )
+    </insert>
+
+    <!-- 根据实体主键删除一个实体 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from porder where id=#{id}
+    </delete>
+
+    <!-- 通过实体删除 -->
+    <delete id="deleteByEntity" parameterType="com.javapandeng.po.Porder">
+        delete from porder where 1=1
+        <include refid="Porder_where"/>
+    </delete>
+
+    <!-- 通过map删除 -->
+    <delete id="deleteByMap" parameterType="java.util.HashMap">
+        delete from porder where 1=1
+        <include refid="Porder_where"/>
+    </delete>
+
+    <!-- 更新一个实体 -->
+    <update id="update" parameterType="com.javapandeng.po.Porder">
+        update porder
+        <set>
+            <include refid="Porder_update"/>
+        </set>
+        where 1=1
+            <include refid="Porder_where"/>
+    </update>
+
+    <!-- 通过id进行修改 -->
+    <update id="updateById" parameterType="com.javapandeng.po.Porder">
+        update porder
+        <set>
+            <include refid="Porder_update"/>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据参数查询 -->
+    <select id="listByMap" resultMap="ResultMapPorder" parameterType="map">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 查询整个表 -->
+    <select id="listAll" resultMap="ResultMapPorder">
+        select <include refid="Porder_field"/>
+        from porder
+    </select>
+
+    <!-- 查询所有实体,根据实体属性值为判断条件查询所有实体 -->
+    <select id="listAllByEntity" resultMap="ResultMapPorder" parameterType="com.javapandeng.po.Porder">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="load" resultMap="ResultMapPorder" parameterType="java.lang.Integer">
+        select <include refid="Porder_field"/>
+        from porder where id=#{id}
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="getById" resultMap="ResultMapPorder" parameterType="java.lang.Integer">
+        select <include refid="Porder_field"/>
+        from porder where id=#{id}
+    </select>
+
+    <!-- 通过map查询-不分页 -->
+    <select id="getByMap" resultMap="ResultMapPorder" parameterType="map">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 通过对象查询-不分页 -->
+    <select id="getByEntity" resultMap="ResultMapPorder" parameterType="com.javapandeng.po.Porder">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 通过map查询分页 -->
+    <select id="findByMap" resultMap="ResultMapPorder" parameterType="map">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 通过对象查询分页 -->
+    <select id="findByEntity" resultMap="ResultMapPorder" parameterType="com.javapandeng.po.Porder">
+        select <include refid="Porder_field"/>
+        from porder where 1=1
+        <include refid="Porder_where"/>
+    </select>
+
+    <!-- 批量新增 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into porder(
+        <include refid="Porder_field"/>
+        ) values(
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{productId},#{userId},#{code},#{addTime},#{orderPrice},#{isdelete},#{status})
+        </foreach>
+        )
+    </insert>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update porder
+            <set>
+                <if test="item.productId != null">
+                    productId = #{item.productId},
+                </if>
+                <if test="item.userId != null">
+                    userId = #{item.userId},
+                </if>
+                <if test="item.code != null">
+                    code = #{item.code},
+                </if>
+                <if test="item.addTime != null">
+                    addTime = #{item.addTime},
+                </if>
+                <if test="item.orderPrice != null">
+                    orderPrice = #{item.orderPrice},
+                </if>
+                <if test="item.isdelete != null">
+                    isdelete = #{item.isdelete},
+                </if>
+                <if test="item.status != null">
+                    status = #{item.status}
+                </if>
+            </set>
+            where 1=1
+            <if test="item.id != null">
+                and id = #{item.id}
+            </if>
+        </foreach>
+    </update>
+
+    <!-- 封装纯sql语法 -->
+    <!-- 查询一个对象返回map -->
+    <select id="getBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回实体类 -->
+    <select id="getBySqlReturnEntity" resultMap="ResultMapPorder">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回map列表 -->
+    <select id="listBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询列表返回实体 -->
+    <select id="listBySqlReturnEntity" resultMap="ResultMapPorderDto">
+        ${sql}
+    </select>
+
+    <!-- 查询分页 -->
+    <select id="findBySqlRerturnEntity" resultMap="ResultMapPorderDto">
+        ${sql}
+    </select>
+
+    <!-- 通过sql修改 -->
+    <update id="updateBysql">
+        ${sql}
+    </update>
+
+    <!-- 通过sql删除 -->
+    <delete id="deleteBySql">
+        ${sql}
+    </delete>
+</mapper>

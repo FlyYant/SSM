@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javapandeng.mapper.ProductMapper">
+    <!-- 实体类与数据库映射字段部分 -->
+    <resultMap id="ResultMapProduct" type="com.javapandeng.po.Product">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="pname" column="pname" jdbcType="VARCHAR"/>
+        <result property="pguishu" column="pguishu" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="VARCHAR"/>
+        <result property="zk" column="zk" jdbcType="INTEGER"/>
+        <result property="scNum" column="scNum" jdbcType="INTEGER"/>
+        <result property="gmNum" column="gmNum" jdbcType="INTEGER"/>
+        <result property="psum" column="psum" jdbcType="INTEGER"/>
+        <result property="cplbOne" column="cplbOne" jdbcType="INTEGER"/>
+        <result property="cplbTwo" column="cplbTwo" jdbcType="INTEGER"/>
+        <result property="url1" column="url1" jdbcType="VARCHAR"/>
+        <result property="url2" column="url2" jdbcType="VARCHAR"/>
+        <result property="url3" column="url3" jdbcType="VARCHAR"/>
+        <result property="url4" column="url4" jdbcType="VARCHAR"/>
+        <result property="url5" column="url5" jdbcType="VARCHAR"/>
+        <result property="ms" column="ms" jdbcType="VARCHAR"/>
+        <result property="pstate" column="pstate" jdbcType="INTEGER"/>
+        <association property="yiji" column="cplbOne" select="com.javapandeng.mapper.CplbMapper.load"/>
+        <association property="erji" column="cplbTwo" select="com.javapandeng.mapper.CplbMapper.load"/>
+        <collection property="pls" column="id" ofType="com.javapandeng.po.Comment" select="com.javapandeng.mapper.CommentMapper.listByProductId"/>
+        <collection property="wts" column="id" ofType="com.javapandeng.po.Problem" select="com.javapandeng.mapper.ProblemMapper.listByProductId"/>
+    </resultMap>
+    
+    <resultMap id="CSNMap" type="java.util.Map">
+        <result property="pname" column="pname" jdbcType="VARCHAR"/>
+        <result property="gmNum" column="gmNum" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询存在购买数的商家商品-->
+    <select id="countGmNum" resultMap="CSNMap">
+        select pname,gmNum from product where gmNum > 0 and pstate = 0
+    </select>
+
+    <!-- 声明数据库字段 -->
+    <sql id="Product_field">
+        id,pname,pguishu,price,zk,scNum,gmNum,psum,cplbOne,cplbTwo,url1,url2,url3,url4,url5,ms,pstate
+    </sql>
+
+    <!-- 实体类属性 -->
+    <sql id="Product_insert">
+        #{id},#{pname},#{pguishu},#{price},#{zk},#{scNum},#{gmNum},#{psum},#{cplbOne},#{cplbTwo},
+        #{url1},#{url2},#{url3},#{url4},#{url5},#{ms},#{pstate}
+    </sql>
+
+    <!-- 更新结果 -->
+    <sql id="Product_update">
+        <if test="id != null">
+            id = #{id},
+        </if>
+        <if test="pname != null">
+            pname = #{pname},
+        </if>
+        <if test="pguishu != null">
+            pguishu = #{pguishu},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="zk != null">
+            zk = #{zk},
+        </if>
+        <if test="scNum != null">
+            scNum = #{scNum},
+        </if>
+        <if test="gmNum != null">
+            gmNum = #{gmNum},
+        </if>
+        <if test="psum != null">
+            psum = #{psum},
+        </if>
+        <if test="cplbOne != null">
+            cplbOne = #{cplbOne},
+        </if>
+        <if test="cplbTwo != null">
+            cplbTwo = #{cplbTwo},
+        </if>
+        <if test="url1 != null">
+            url1 = #{url1},
+        </if>
+        <if test="url2 != null">
+            url2 = #{url2},
+        </if>
+        <if test="url3 != null">
+            url3 = #{url3},
+        </if>
+        <if test="url4 != null">
+            url4 = #{url4},
+        </if>
+        <if test="url5 != null">
+            url5 = #{url5},
+        </if>
+        <if test="ms != null">
+            ms = #{ms},
+        </if>
+        <if test="pstate != null">
+            pstate = #{pstate}
+        </if>
+    </sql>
+
+    <!-- 查询时的条件 -->
+    <sql id="Product_where">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="pname != null">
+            and pname = #{pname}
+        </if>
+        <if test="pguishu != null">
+            and pguishu = #{pguishu}
+        </if>
+        <if test="price != null">
+            and price = #{price}
+        </if>
+        <if test="zk != null">
+            and zk = #{zk}
+        </if>
+        <if test="scNum != null">
+            and scNum = #{scNum}
+        </if>
+        <if test="gmNum != null">
+            and gmNum = #{gmNum}
+        </if>
+        <if test="psum != null">
+            and psum = #{psum}
+        </if>
+        <if test="cplbOne != null">
+            and cplbOne = #{cplbOne}
+        </if>
+        <if test="cplbTwo != null">
+            and cplbTwo = #{cplbTwo}
+        </if>
+        <if test="url1 != null">
+            and url1 = #{url1}
+        </if>
+        <if test="url2 != null">
+            and url2 = #{url2}
+        </if>
+        <if test="url3 != null">
+            and url3 = #{url3}
+        </if>
+        <if test="url4 != null">
+            and url4 = #{url4}
+        </if>
+        <if test="url5 != null">
+            and url5 = #{url5}
+        </if>
+        <if test="ms != null">
+            and ms = #{ms}
+        </if>
+        <if test="pstate != null">
+            and pstate = #{pstate}
+        </if>
+    </sql>
+
+    <!-- 新增 -->
+    <!-- 参数：实体类 -->
+    <!-- 返回：主键 -->
+    <insert id="insert" parameterType="com.javapandeng.po.Product" useGeneratedKeys="true" keyProperty="id">
+        insert into product(
+        <include refid="Product_field"/>
+        ) values(
+        <include refid="Product_insert"/>
+        )
+    </insert>
+
+    <!-- 根据实体主键删除一个实体 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from product where id=#{id}
+    </delete>
+
+    <!-- 通过实体删除 -->
+    <delete id="deleteByEntity" parameterType="com.javapandeng.po.Product">
+        delete from product where 1=1
+        <include refid="Product_where"/>
+    </delete>
+
+    <!-- 通过map删除 -->
+    <delete id="deleteByMap" parameterType="java.util.HashMap">
+        delete from product where 1=1
+        <include refid="Product_where"/>
+    </delete>
+
+    <!-- 更新一个实体 -->
+    <update id="update" parameterType="com.javapandeng.po.Product">
+        update product
+        <set>
+            <include refid="Product_update"/>
+        </set>
+        where 1=1
+            <include refid="Product_where"/>
+    </update>
+
+    <!-- 通过id进行修改 -->
+    <update id="updateById" parameterType="com.javapandeng.po.Product">
+        update product
+        <set>
+            <include refid="Product_update"/>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据参数查询 -->
+    <select id="listByMap" resultMap="ResultMapProduct" parameterType="map">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 查询整个表 -->
+    <select id="listAll" resultMap="ResultMapProduct">
+        select <include refid="Product_field"/>
+        from product
+    </select>
+
+    <!-- 查询所有实体,根据实体属性值为判断条件查询所有实体 -->
+    <select id="listAllByEntity" resultMap="ResultMapProduct" parameterType="com.javapandeng.po.Product">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="load" resultMap="ResultMapProduct" parameterType="java.lang.Integer">
+        select <include refid="Product_field"/>
+        from product where id=#{id}
+    </select>
+
+    <!-- 根据主键获取一个实体 -->
+    <select id="getById" resultMap="ResultMapProduct" parameterType="java.lang.Integer">
+        select <include refid="Product_field"/>
+        from product where id=#{id}
+    </select>
+
+    <!-- 通过map查询-不分页 -->
+    <select id="getByMap" resultMap="ResultMapProduct" parameterType="map">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 通过对象查询-不分页 -->
+    <select id="getByEntity" resultMap="ResultMapProduct" parameterType="com.javapandeng.po.Product">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 通过map查询分页 -->
+    <select id="findByMap" resultMap="ResultMapProduct" parameterType="map">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 通过对象查询分页 -->
+    <select id="findByEntity" resultMap="ResultMapProduct" parameterType="com.javapandeng.po.Product">
+        select <include refid="Product_field"/>
+        from product where 1=1
+        <include refid="Product_where"/>
+    </select>
+
+    <!-- 批量新增 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into product(
+        <include refid="Product_field"/>
+        ) values(
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.pname},#{item.pguishu},#{item.price},#{item.zk},#{item.scNum},#{item.gmNum},#{item.psum},#{item.cplbOne},#{item.cplbTwo},
+            #{item.url1},#{item.url2},#{item.url3},#{item.url4},#{item.url5},#{item.ms},#{item.pstate})
+        </foreach>
+        )
+    </insert>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update product
+            <set>
+                <if test="item.pname != null">
+                    pname = #{item.pname},
+                </if>
+                <if test="item.pguishu != null">
+                    pguishu = #{item.pguishu},
+                </if>
+                <if test="item.price != null">
+                    price = #{item.price},
+                </if>
+                <if test="item.zk != null">
+                    zk = #{item.zk},
+                </if>
+                <if test="item.scNum != null">
+                    scNum = #{item.scNum},
+                </if>
+                <if test="item.gmNum != null">
+                    gmNum = #{item.gmNum},
+                </if>
+                <if test="item.psum != null">
+                    psum = #{item.psum},
+                </if>
+                <if test="item.cplbOne != null">
+                    cplbOne = #{item.cplbOne},
+                </if>
+                <if test="item.cplbTwo != null">
+                    cplbTwo = #{item.cplbTwo},
+                </if>
+                <if test="item.url1 != null">
+                    url1 = #{item.url1},
+                </if>
+                <if test="item.url2 != null">
+                    url2 = #{item.url2},
+                </if>
+                <if test="item.url3 != null">
+                    url3 = #{item.url3},
+                </if>
+                <if test="item.url4 != null">
+                    url4 = #{item.url4},
+                </if>
+                <if test="item.url5 != null">
+                    url5 = #{item.url5},
+                </if>
+                <if test="item.ms != null">
+                    ms = #{item.ms},
+                </if>
+                <if test="item.pstate != null">
+                    pstate = #{item.pstate}
+                </if>
+            </set>
+            where 1=1
+            <if test="item.id != null">
+                and id = #{item.id}
+            </if>
+        </foreach>
+    </update>
+
+    <!-- 封装纯sql语法 -->
+    <!-- 查询一个对象返回map -->
+    <select id="getBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回实体类 -->
+    <select id="getBySqlReturnEntity" resultMap="ResultMapProduct">
+        ${sql}
+    </select>
+
+    <!-- 查询一个对象返回map列表 -->
+    <select id="listBySqlReturnMap" resultType="map">
+        ${sql}
+    </select>
+
+    <!-- 查询列表返回实体 -->
+    <select id="listBySqlReturnEntity" resultMap="ResultMapProduct">
+        ${sql}
+    </select>
+
+    <!-- 查询分页 -->
+    <select id="findBySqlRerturnEntity" resultMap="ResultMapProduct">
+        ${sql}
+    </select>
+
+    <!-- 通过sql修改 -->
+    <update id="updateBysql">
+        ${sql}
+    </update>
+
+    <!-- 通过sql删除 -->
+    <delete id="deleteBySql">
+        ${sql}
+    </delete>
+</mapper>
